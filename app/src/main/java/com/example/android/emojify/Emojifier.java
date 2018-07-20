@@ -28,10 +28,11 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 
+import timber.log.Timber;
+
 class Emojifier {
 
-    private static final String LOG_TAG = Emojifier.class.getSimpleName();
-
+    // DONE (3): Change all Log statements to Timber logs and remove the LOG_TAG variable
     private static final float EMOJI_SCALE_FACTOR = .9f;
     private static final double SMILING_PROB_THRESHOLD = .15;
     private static final double EYE_OPEN_PROB_THRESHOLD = .5;
@@ -58,7 +59,7 @@ class Emojifier {
         SparseArray<Face> faces = detector.detect(frame);
 
         // Log the number of faces
-        Log.d(LOG_TAG, "detectFaces: number of faces = " + faces.size());
+        Timber.d("detectFaces: number of faces = " + faces.size());
 
         // Initialize result bitmap to original picture
         Bitmap resultBitmap = picture;
@@ -133,10 +134,10 @@ class Emojifier {
 
     private static Emoji whichEmoji(Face face) {
         // Log all the probabilities
-        Log.d(LOG_TAG, "whichEmoji: smilingProb = " + face.getIsSmilingProbability());
-        Log.d(LOG_TAG, "whichEmoji: leftEyeOpenProb = "
+        Timber.d("whichEmoji: smilingProb = " + face.getIsSmilingProbability());
+        Timber.d("whichEmoji: leftEyeOpenProb = "
                 + face.getIsLeftEyeOpenProbability());
-        Log.d(LOG_TAG, "whichEmoji: rightEyeOpenProb = "
+        Timber.d("whichEmoji: rightEyeOpenProb = "
                 + face.getIsRightEyeOpenProbability());
 
 
@@ -148,12 +149,12 @@ class Emojifier {
 
         // Determine and log the appropriate emoji
         Emoji emoji;
-        if(smiling) {
+        if (smiling) {
             if (leftEyeClosed && !rightEyeClosed) {
                 emoji = Emoji.LEFT_WINK;
-            }  else if(rightEyeClosed && !leftEyeClosed){
+            } else if (rightEyeClosed && !leftEyeClosed) {
                 emoji = Emoji.RIGHT_WINK;
-            } else if (leftEyeClosed){
+            } else if (leftEyeClosed) {
                 emoji = Emoji.CLOSED_EYE_SMILE;
             } else {
                 emoji = Emoji.SMILE;
@@ -161,9 +162,9 @@ class Emojifier {
         } else {
             if (leftEyeClosed && !rightEyeClosed) {
                 emoji = Emoji.LEFT_WINK_FROWN;
-            }  else if(rightEyeClosed && !leftEyeClosed){
+            } else if (rightEyeClosed && !leftEyeClosed) {
                 emoji = Emoji.RIGHT_WINK_FROWN;
-            } else if (leftEyeClosed){
+            } else if (leftEyeClosed) {
                 emoji = Emoji.CLOSED_EYE_FROWN;
             } else {
                 emoji = Emoji.FROWN;
@@ -172,7 +173,7 @@ class Emojifier {
 
 
         // Log the chosen Emoji
-        Log.d(LOG_TAG, "whichEmoji: " + emoji.name());
+        Timber.d("whichEmoji: " + emoji.name());
 
         return emoji;
     }
